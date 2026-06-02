@@ -20,6 +20,9 @@ public class Accion extends ActionSupport {
 
     @Override
     public String execute() {
+//        if (usuario.isNuevo()) {
+//            return "primer_acceso"; // <-- Un String inventado por ti
+//        }
         // 1. El controlador usa getText() para traer la frase traducida del properties.
         // Además, reemplaza el {0} con el nombre del usuario automáticamente.
         String mensajeTraducido = getText("accion.exito", new String[]{nombre});

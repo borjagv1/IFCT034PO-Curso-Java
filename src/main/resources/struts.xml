@@ -4,13 +4,22 @@
         "http://struts.apache.org/dtds/struts-2.5.dtd">
 
 <struts>
+    <constant name="struts.i18n.encoding" value="UTF-8" />
+    <constant name="struts.locale" value="es_ES" />
+
     <package name="miPaquete" extends="struts-default" namespace="/">
 
         <action name="saludar" class="org.prueba.acciones.Accion">
-            <result name="success">/bienvenido.jsp</result>
+            <result name="success" type="freemarker">
+                <param name="location">/bienvenido.ftl</param>
+            </result>
+<!--            <result name="success" type="redirect">-->
+<!--                <param name="location">/NewWorld.jpg</param>-->
+<!--            </result>-->
             <result name="login_failed">/login.jsp</result>
             <result name="account_locked">/cuenta-bloqueada.jsp</result>
             <result name="input">/index.jsp</result>
+            <result name="primer_acceso">/tutorial.jsp</result>
         </action>
 
     </package>
