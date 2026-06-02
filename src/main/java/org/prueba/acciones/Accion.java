@@ -6,29 +6,45 @@ public class Accion extends ActionSupport {
 
     // Estas son las propiedades JavaBean del texto
     private String nombre;
-    private String mensaje;
+    // EL CAMBIO: mensaje ya no es un String suelto, ahora es un objeto del Modelo
+    private MessageStore messageStore;
 
     // 1. El interceptor 'workflow' llamará a este method automáticamente
     @Override
     public void validate() {
         if (nombre == null || nombre.trim().isEmpty()) {
             // Registramos un error específico para el atributo "nombre"
-            addFieldError("nombre", "El nombre es obligatorio, no lo dejes vacío.");
+            addFieldError("nombre", getText("user.required"));
         }
     }
 
-    // 2. LA LÓGICA: Solo se ejecutará si el method validate() NO ha encontrado errores
     @Override
     public String execute() {
-        // Como el workflow ya ha filtrado los errores, aquí ya sabemos al 100% que el nombre es correcto
-        this.mensaje = "¡Hola, " + nombre + "! Validación de Struts superada con éxito.";
+        // 1. El controlador usa getText() para traer la frase traducida del properties.
+        // Además, reemplaza el {0} con el nombre del usuario automáticamente.
+        String mensajeTraducido = getText("accion.exito", new String[]{nombre});
+
+        // 2. Le pasamos el mensaje ya internacionalizado al Modelo
+        this.messageStore = new MessageStore(mensajeTraducido);
+
         return SUCCESS;
     }
 
-    // Los Getters y Setters (imprescindibles para que Struts mueva los datos)
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    // Getters y Setters necesarios
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getMensaje() { return mensaje; }
-    public void setMensaje(String mensaje) { this.mensaje = mensaje; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    // 3. EL CAMBIO: Cambiamos el getter del antiguo String por el getter del objeto MessageStore
+    public MessageStore getMessageStore() {
+        return messageStore;
+    }
+
+    public void setMessageStore(MessageStore messageStore) {
+        this.messageStore = messageStore;
+    }
 }
